@@ -81,3 +81,15 @@ jobs:
           platforms: linux/amd64,linux/arm64/v8
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+
+          delete-only-untagged-versions: 'true'
+
+      # Clean-up untagged; See: 
+      # https://github.com/actions/delete-package-versions?tab=readme-ov-file#delete-all-untagged-container-versions-except-y-latest-untagged-versions
+      - name: Clean-up untagged packages
+        uses: actions/delete-package-versions@v5.0.0
+        with: 
+          package-name: 'devbox'
+          package-type: 'container'
+          min-versions-to-keep: 3
+
