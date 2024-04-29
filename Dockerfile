@@ -1,6 +1,9 @@
 # Use the official Ubuntu base image
 FROM alpine:edge
 
+# Define the home directory for the "dev" user as an environment variable
+ENV DEV_HOME /home/dev
+
 # Update package lists and install necessary packages
 RUN apk add \
   git \
@@ -25,13 +28,20 @@ RUN curl -fsSL \
 
 RUN chmod +x /usr/local/bin/mongosh
 
-WORKDIR $HOME
+# Create a non-root user named "dev" with the home directory defined by the environment variable
+RUN adduser -D -h $DEV_HOME dev
+
+# Set the default user to "dev"
+USER dev
+
+# Set the default working directory for the "dev" user
+WORKDIR $DEV_HOME
 
 # Clone starter
 RUN git clone https://github.com/brenodt/.dotfiles.git \
   --branch minimal \
   --depth 1 \
-  --single-branch $HOME/.config
+  --single-branch $DEV_HOME/.config
 
 # Set default command to launch tmux
 CMD ["tmux"]
