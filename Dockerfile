@@ -19,7 +19,7 @@ RUN apk add \
   --no-cache
 
 # Configure perf
-echo "kernel.perf_event_paranoid = 1" >> /etc/sysctl.conf
+RUN echo "kernel.perf_event_paranoid = 1" >> /etc/sysctl.conf
 
 # Import MongoDB public GPG key
 RUN curl -fsSL \
